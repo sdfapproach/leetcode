@@ -7,9 +7,11 @@
  */
 var isPalindrome = function(s) {
 
-   const text = s.toLowerCase().replace(/[^a-z0-9]/g, '');
+//    const text = s.toLowerCase().replace(/[^a-z0-9]/g, '');
 
-   const reversed = text.split('').reverse().join('')
+//    const reversed = text.split('').reverse().join('')
 
-   return text === reversed;
+//    return text === reversed;
+    const cleanText = s.toLowerCase().replace(/[^a-z0-9]/g, '');
+    return cleanText === cleanText.split('').reverse().join('');
 };
