@@ -1,37 +1,43 @@
-# https://leetcode.com/problems/magic-squares-in-grid/?envType=daily-question&envId=2024-08-09
+# https://leetcode.com/problems/magic-squares-in-grid/?envType=daily-question&envId=2025-12-30
 # Magic Squares In Grid
 
 class Solution:
     def numMagicSquaresInside(self, grid: List[List[int]]) -> int:
         
-        def is_magic(square):
-            if sorted(square) != list(range(1, 10)):
-                return False
-            
-            s1 = sum(square[0:3])
-            s2 = sum(square[3:6])
-            s3 = sum(square[6:9])
-            s4 = sum(square[0::3])
-            s5 = sum(square[1::3])
-            s6 = sum(square[2::3])
-            s7 = sum(square[0::4])
-            s8 = sum(square[2:8:2])
-
-            return s1 == s2 == s3 == s4 == s5 == s6 == s7 == s8 == 15
-
-        rows = len(grid)
-        cols = len(grid[0])
+        rows, cols = len(grid), len(grid[0])
         count = 0
-        
+
+        def is_magic(r, c):
+            if grid[r + 1][c + 1] != 5:
+                return False
+
+            nums = set()
+            for i in range(r, r + 3):
+                for j in range(c, c + 3):
+                    val = grid[i][j]
+                    if val < 1 or val > 9:
+                        return False
+                    nums.add(val)
+
+            if len(nums) != 9:
+                return False
+
+            for i in range(3):
+                if sum(grid[r + i][c + j] for j in range(3)) != 15:
+                    return False
+                if sum(grid[r + j][c + i] for j in range(3)) != 15:
+                    return False
+
+            if grid[r][c] + grid[r + 1][c + 1] + grid[r + 2][c + 2] != 15:
+                return False
+            if grid[r][c + 2] + grid[r + 1][c + 1] + grid[r + 2][c] != 15:
+                return False
+
+            return True
+
         for i in range(rows - 2):
             for j in range(cols - 2):
-                square = [
-                    grid[i][j], grid[i][j+1], grid[i][j+2],
-                    grid[i+1][j], grid[i+1][j+1], grid[i+1][j+2],
-                    grid[i+2][j], grid[i+2][j+1], grid[i+2][j+2]
-                ]
-                
-                if is_magic(square):
+                if is_magic(i, j):
                     count += 1
-                    
+
         return count
